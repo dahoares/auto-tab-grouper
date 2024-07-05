@@ -1,35 +1,30 @@
-function groupTabs(tabsToUpdate, groupName) {
-  chrome.tabs.query({}, (tabs) => {
-    chrome.tabGroups.query({}, (groups) => {
-      let existingGroup = groups.find(g => g.title === groupName);
+async function groupTabs(tabsToUpdate, groupName) {
+  try {
+    const tabs = await chrome.tabs.query({});
+    const groups = await chrome.tabGroups.query({});
+    let existingGroup = groups.find(g => g.title === groupName);
 
-      if (existingGroup) {
-        const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
-        if (tabIds.length > 0) {
-          // Check if the group is collapsed and expand it if necessary
-          if (existingGroup.collapsed) {
-            chrome.tabGroups.update(existingGroup.id, { collapsed: false }, () => {
-              chrome.tabs.group({
-                groupId: existingGroup.id,
-                tabIds: tabIds
-              });
-            });
-          } else {
-            chrome.tabs.group({
-              groupId: existingGroup.id,
-              tabIds: tabIds
-            });
-          }
-        }
-      } else {
-        const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
-        if (tabIds.length > 0) {
-          chrome.tabs.group({ tabIds: tabIds }, (groupId) => {
-            chrome.tabGroups.update(groupId, { title: groupName });
-          });
-        }
+    const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
+    if (tabIds.length === 0) return;
+
+    if (existingGroup) {
+      if (existingGroup.collapsed) {
+        await chrome.tabGroups.update(existingGroup.id, { collapsed: false });
       }
-    });
+      await groupTabsInGroup(existingGroup.id, tabIds);
+    } else {
+      const groupId = await chrome.tabs.group({ tabIds: tabIds });
+      await chrome.tabGroups.update(groupId, { title: groupName });
+    }
+  } catch (error) {
+    console.error('Error grouping tabs:', error);
+  }
+}
+
+async function groupTabsInGroup(groupId, tabIds) {
+  await chrome.tabs.group({
+    groupId: groupId,
+    tabIds: tabIds
   });
 }
 
