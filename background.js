@@ -1,18 +1,35 @@
 function groupTabs(tabsToUpdate, groupName) {
-  chrome.tabGroups.query({}, (groups) => {
-    let existingGroup = groups.find(g => g.title === groupName);
+  chrome.tabs.query({}, (tabs) => {
+    chrome.tabGroups.query({}, (groups) => {
+      let existingGroup = groups.find(g => g.title === groupName);
 
-    if (existingGroup) {
-      const tabIds = tabsToUpdate.map(t => t.id);
-      chrome.tabs.group({
-        groupId: existingGroup.id,
-        tabIds: tabIds
-      });
-    } else {
-      chrome.tabs.group({ tabIds: tabsToUpdate.map(t => t.id) }, (groupId) => {
-        chrome.tabGroups.update(groupId, { title: groupName });
-      });
-    }
+      if (existingGroup) {
+        const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
+        if (tabIds.length > 0) {
+          // Check if the group is collapsed and expand it if necessary
+          if (existingGroup.collapsed) {
+            chrome.tabGroups.update(existingGroup.id, { collapsed: false }, () => {
+              chrome.tabs.group({
+                groupId: existingGroup.id,
+                tabIds: tabIds
+              });
+            });
+          } else {
+            chrome.tabs.group({
+              groupId: existingGroup.id,
+              tabIds: tabIds
+            });
+          }
+        }
+      } else {
+        const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
+        if (tabIds.length > 0) {
+          chrome.tabs.group({ tabIds: tabIds }, (groupId) => {
+            chrome.tabGroups.update(groupId, { title: groupName });
+          });
+        }
+      }
+    });
   });
 }
 
