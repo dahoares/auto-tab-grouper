@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Auto Tab Grouper",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Groeperen van tabbladen op basis van base URL.",
   "permissions": [
     "tabs",
