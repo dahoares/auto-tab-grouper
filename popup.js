@@ -2,6 +2,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pauseButton = document.getElementById('pause');
   const groupWindowsButton = document.getElementById('group-windows');
   const groupsSection = document.getElementById('groups-section');
+  const colors = {
+    grey: '#DADCE0',
+    blue: '#8AB4F8',
+    red: '#F28B82',
+    yellow: '#FDD663',
+    green: '#81C995',
+    pink: '#FF8BCB',
+    purple: '#C58AF9',
+    cyan: '#78D9EC',
+    orange: '#FCAD70'
+  };
 
   chrome.storage.sync.get(['pause', 'groupWindows'], (data) => {
     updateButtonState(pauseButton, data.pause);
@@ -83,6 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cyan: '#78D9EC',
         orange: '#FCAD70'
       };
+           
       
       Object.entries(colors).forEach(([key, value]) => {
         const colorButton = document.createElement('button');
@@ -115,13 +127,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const groups = await chrome.tabGroups.query({});
     groups.forEach((group) => {
       const groupButton = document.createElement('button');
-      groupButton.textContent = group.title;
+      groupButton.innerHTML = `<i class="fas fa-link"></i> ${group.title}`;
       groupButton.className = 'btn-custom group-btn';
-      groupButton.style.backgroundColor = group.color;
+      groupButton.style.backgroundColor = getSelectedColor(group.color);
       groupButton.onclick = () => displayTabsForGroup(group.id);
   
       const colorButton = document.createElement('button');
-      colorButton.textContent = 'Kleur';
+      colorButton.innerHTML = `<i class="fas fa-palette"></i> Kleur`;
       colorButton.className = 'btn-custom color-btn';
       colorButton.onclick = () => {
         changeGroupColor(group.id);
@@ -163,6 +175,22 @@ colorButton.onclick = () => {
   toggleSectionVisibility(group.id, 'color');
 };
 
+function getSelectedColor(color) {
+  const colors = {
+    grey: '#DADCE0',
+    blue: '#8AB4F8',
+    red: '#F28B82',
+    yellow: '#FDD663',
+    green: '#81C995',
+    pink: '#FF8BCB',
+    purple: '#C58AF9',
+    cyan: '#78D9EC',
+    orange: '#FCAD70'
+  };
+
+  return colors[color] || '#DADCE0'; // Standaardkleur als 'color' niet gevonden wordt
+}
+
 function toggleSectionVisibility(groupId, sectionType) {
   const sectionId = sectionType === 'group' ? `group-section-${groupId}` : `color-section-${groupId}`;
   const section = document.getElementById(sectionId);
@@ -179,5 +207,4 @@ function changeGroupColor(groupId) {
   const colorSection = document.createElement('div');
   colorSection.id = 'color-section-' + groupId;
   colorSection.style.display = 'block';
-  colorSection.style.marginTop = '10px';
 }

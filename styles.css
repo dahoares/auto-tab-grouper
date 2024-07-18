@@ -2,6 +2,8 @@
   display: flex;
   justify-content: space-around;
   margin-top: 10px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .color-choice-btn {
@@ -9,4 +11,25 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+.btn-custom {
+}
+
+.close-btn {
+  color: #333; 
+}
+
+.button-container {
+  display: flex;
+}
+
+.color-btn {
+  width: 25%;
+  color: #333; 
+}
+
+.group-btn {
+  width: 75%;
+  color: #333; 
 }
