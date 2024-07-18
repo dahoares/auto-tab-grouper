@@ -1,0 +1,12 @@
+.color-section {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.color-choice-btn {
+  background-color: initial; /* Standaardwaarde, wordt dynamisch ingesteld */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
