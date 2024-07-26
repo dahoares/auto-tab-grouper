@@ -15,13 +15,25 @@
 
 .btn-custom {
 }
-
-.close-btn {
-  color: #333; 
+.button-container {
+    display: flex;
+    flex-direction: row; /* Zorgt ervoor dat de knoppen naast elkaar verschijnen */
+    margin-bottom: 10px; /* Optioneel: ruimte tussen de containers */
+    align-items: center; /* Zorgt ervoor dat de knoppen verticaal gecentreerd zijn */
+    flex-wrap: wrap; /* Zorgt ervoor dat de secties onder de knoppen verschijnen */
 }
 
-.button-container {
-  display: flex;
+.btn-custom {
+    flex: 1; /* Zorgt ervoor dat de knoppen evenveel ruimte innemen */
+    margin: 5px; /* Optioneel: ruimte tussen de knoppen */
+}
+
+.color-section, .tabs-display-section {
+    width: 100%; /* Zorgt ervoor dat de secties de volledige breedte innemen */
+    margin-top: 10px; /* Ruimte boven de secties */
+}
+.close-btn {
+  color: #333; 
 }
 
 .color-btn {

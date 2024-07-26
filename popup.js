@@ -32,26 +32,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   async function displayTabsForGroup(groupId) {
-      const existingColorSection = document.getElementById('color-section-' + groupId);
-      if (existingColorSection) {
-          existingColorSection.remove();
-      }
-  
-      try {
-          const tabs = await chrome.tabs.query({ groupId: groupId });
-          const tabsList = document.createElement('ul');
-          tabs.forEach((tab) => {
-              const listItem = document.createElement('li');
-              listItem.textContent = tab.title;
-              tabsList.appendChild(listItem);
-          });
-          const tabsDisplaySection = document.getElementById('tabs-display-section');
-          tabsDisplaySection.innerHTML = '';
-          tabsDisplaySection.appendChild(tabsList);
-      } catch (error) {
-          console.error('Error displaying tabs for group:', error);
-      }
-  }
+    const existingTabsSection = document.getElementById('tabs-section-' + groupId);
+    if (existingTabsSection) {
+        existingTabsSection.remove();
+    }
+
+    try {
+        const tabs = await chrome.tabs.query({ groupId: groupId });
+        const tabsList = document.createElement('ul');
+        tabs.forEach((tab) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = tab.title;
+            tabsList.appendChild(listItem);
+        });
+
+        const tabsSection = document.createElement('div');
+        tabsSection.id = 'tabs-section-' + groupId;
+        tabsSection.appendChild(tabsList);
+
+        const buttonContainer = document.querySelector(`[data-group-id="${groupId}"]`);
+        buttonContainer.appendChild(tabsSection);
+    } catch (error) {
+        console.error('Error displaying tabs for group:', error);
+    }
+}
   
   function changeGroupColor(groupId) {
       const tabsDisplaySection = document.getElementById('tabs-display-section');
@@ -62,7 +66,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const existingColorSection = document.getElementById('color-section-' + groupId);
       if (existingColorSection) {
         existingColorSection.remove();
-      }function changeGroupColor(groupId) {
+      }
+      
+      function changeGroupColor(groupId) {
 
   const existingColorSection = document.getElementById('color-section-' + groupId);
   if (existingColorSection) {
@@ -139,18 +145,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         changeGroupColor(group.id);
       };
   
-      const existingButtonContainer = document.querySelector(`[data-group-id="${group.id}"]`);
-      if (existingButtonContainer) {
-        existingButtonContainer.appendChild(groupButton);
-        existingButtonContainer.appendChild(colorButton);
-      } else {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.setAttribute('data-group-id', group.id);
-        buttonContainer.className = 'button-container';
-        buttonContainer.appendChild(groupButton);
-        buttonContainer.appendChild(colorButton);
-        groupsSection.appendChild(buttonContainer);
-      }
+      const buttonContainer = document.createElement('div');
+      buttonContainer.setAttribute('data-group-id', group.id);
+      buttonContainer.className = 'button-container';
+      buttonContainer.appendChild(groupButton);
+      buttonContainer.appendChild(colorButton);
+
+      // Voeg de tabs-display-section en color-section toe aan de button-container
+      const tabsDisplaySection = document.createElement('div');
+      tabsDisplaySection.className = 'tabs-display-section';
+      buttonContainer.appendChild(tabsDisplaySection);
+
+      const colorSection = document.createElement('div');
+      colorSection.className = 'color-section';
+      buttonContainer.appendChild(colorSection);
+
+      document.getElementById('groups-section').appendChild(buttonContainer);
     });
   } catch (error) {
     console.error('Error fetching tab groups:', error);
@@ -192,19 +202,28 @@ function getSelectedColor(color) {
 }
 
 function toggleSectionVisibility(groupId, sectionType) {
-  const sectionId = sectionType === 'group' ? `group-section-${groupId}` : `color-section-${groupId}`;
-  const section = document.getElementById(sectionId);
-  if (section) {
-    section.style.display = section.style.display === 'none' ? 'block' : 'none';
-  } else {
-    if (sectionType === 'color') {
-      changeGroupColor(groupId);
+  const buttonContainer = document.querySelector(`[data-group-id="${groupId}"]`);
+  if (!buttonContainer) {
+    console.error('Button container not found');
+    return;
+  }
+
+  const tabsSection = buttonContainer.querySelector('.tabs-display-section');
+  const colorSection = buttonContainer.querySelector('.color-section');
+
+  if (sectionType === 'tabs') {
+    if (tabsSection.style.display === 'block') {
+      tabsSection.style.display = 'none';
+    } else {
+      tabsSection.style.display = 'block';
+      colorSection.style.display = 'none';
+    }
+  } else if (sectionType === 'color') {
+    if (colorSection.style.display === 'block') {
+      colorSection.style.display = 'none';
+    } else {
+      colorSection.style.display = 'block';
+      tabsSection.style.display = 'none';
     }
   }
-}
-
-function changeGroupColor(groupId) {
-  const colorSection = document.createElement('div');
-  colorSection.id = 'color-section-' + groupId;
-  colorSection.style.display = 'block';
 }
