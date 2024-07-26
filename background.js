@@ -211,3 +211,21 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
     });
   });
 });
+
+async function updateBadge() {
+  try {
+    const groups = await chrome.tabGroups.query({});
+    const groupCount = groups.length.toString();
+    chrome.action.setBadgeText({ text: groupCount });
+    chrome.action.setBadgeBackgroundColor({ color: '#ffcc33' });
+  } catch (error) {
+    console.error('Error updating badge:', error);
+  }
+}
+
+chrome.tabGroups.onCreated.addListener(updateBadge);
+chrome.tabGroups.onRemoved.addListener(updateBadge);
+chrome.tabGroups.onUpdated.addListener(updateBadge);
+
+chrome.runtime.onStartup.addListener(updateBadge);
+chrome.runtime.onInstalled.addListener(updateBadge);

@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       buttonContainer.appendChild(groupButton);
       buttonContainer.appendChild(colorButton);
 
-      // Voeg de tabs-display-section en color-section toe aan de button-container
       const tabsDisplaySection = document.createElement('div');
       tabsDisplaySection.className = 'tabs-display-section';
       buttonContainer.appendChild(tabsDisplaySection);
