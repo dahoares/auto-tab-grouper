@@ -139,17 +139,32 @@ document.addEventListener('DOMContentLoaded', async () => {
       groupButton.onclick = () => displayTabsForGroup(group.id);
   
       const colorButton = document.createElement('button');
-      colorButton.innerHTML = `<i class="fas fa-palette"></i> Kleur`;
+      colorButton.innerHTML = `<i class="fas fa-palette"></i>`;
       colorButton.className = 'btn-custom color-btn';
       colorButton.onclick = () => {
         changeGroupColor(group.id);
       };
   
+      const closeButton = document.createElement('button');
+      closeButton.innerHTML = `<i class="fas fa-times"></i>`;
+      closeButton.className = 'btn-custom close-btn';
+      closeButton.onclick = async () => {
+        try {
+          const tabs = await chrome.tabs.query({ groupId: group.id });
+          const tabIds = tabs.map(tab => tab.id);
+          await chrome.tabs.remove(tabIds);
+          buttonContainer.remove();
+        } catch (error) {
+          console.error('Error removing tab group:', error);
+        }
+      };
+
       const buttonContainer = document.createElement('div');
       buttonContainer.setAttribute('data-group-id', group.id);
       buttonContainer.className = 'button-container';
       buttonContainer.appendChild(groupButton);
       buttonContainer.appendChild(colorButton);
+      buttonContainer.appendChild(closeButton);
 
       const tabsDisplaySection = document.createElement('div');
       tabsDisplaySection.className = 'tabs-display-section';

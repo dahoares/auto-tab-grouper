@@ -2,8 +2,15 @@
   display: flex;
   justify-content: space-around;
   margin-top: 10px;
-  margin-left: 10%;
-  margin-right: 10%;
+  padding-left: 10px; /* Vervang marge door padding */
+  padding-right: 10px; /* Vervang marge door padding */
+  box-sizing: border-box; /* Zorgt ervoor dat de padding wordt meegerekend in de breedte */
+  width: 100%; /* Zorgt ervoor dat de sectie binnen het frame blijft */
+}
+
+.tabs-display-section {
+  width: 100%; /* Zorgt ervoor dat de secties de volledige breedte innemen */
+  margin-top: 10px; /* Ruimte boven de secties */
 }
 
 .color-choice-btn {
@@ -13,8 +20,6 @@
   border-radius: 50%;
 }
 
-.btn-custom {
-}
 .button-container {
     display: flex;
     flex-direction: row; /* Zorgt ervoor dat de knoppen naast elkaar verschijnen */
@@ -23,25 +28,41 @@
     flex-wrap: wrap; /* Zorgt ervoor dat de secties onder de knoppen verschijnen */
 }
 
+
 .btn-custom {
-    flex: 1; /* Zorgt ervoor dat de knoppen evenveel ruimte innemen */
-    margin: 5px; /* Optioneel: ruimte tussen de knoppen */
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 15px;
+  margin: 5px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.color-section, .tabs-display-section {
-    width: 100%; /* Zorgt ervoor dat de secties de volledige breedte innemen */
-    margin-top: 10px; /* Ruimte boven de secties */
-}
 .close-btn {
-  color: #333; 
+  height: 40px; /* Stel een vaste hoogte in voor de knoppen */
+  width: 15%; /* Specifieke breedte voor de close button */
+  color: #333;
+  display: flex;
+  justify-content: center; /* Horizontaal centreren */
+  align-items: center; /* Verticaal centreren */
 }
 
 .color-btn {
-  width: 25%;
+  height: 40px; /* Stel een vaste hoogte in voor de knoppen */
+  width: 15%;
   color: #333; 
 }
 
 .group-btn {
-  width: 75%;
+  height: 40px; /* Stel een vaste hoogte in voor de knoppen */
+  width: 60%;
   color: #333; 
 }
