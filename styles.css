@@ -1,39 +1,42 @@
+/* .color-section: Section for color choices */
 .color-section {
   display: flex;
   justify-content: space-around;
   margin-top: 10px;
-  padding-left: 10px; /* Vervang marge door padding */
-  padding-right: 10px; /* Vervang marge door padding */
-  box-sizing: border-box; /* Zorgt ervoor dat de padding wordt meegerekend in de breedte */
-  width: 100%; /* Zorgt ervoor dat de sectie binnen het frame blijft */
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
+/* .tabs-display-section: Section for displaying tabs */
 .tabs-display-section {
-  width: 100%; /* Zorgt ervoor dat de secties de volledige breedte innemen */
-  margin-top: 10px; /* Ruimte boven de secties */
+  width: 100%; 
+  margin-top: 10px; 
 }
 
-.color-choice-btn {
-  background-color: initial; /* Standaardwaarde, wordt dynamisch ingesteld */
-  width: 30px;
-  height: 30px;
+/* .color-choice-btn: Button for choosing colors */
+/* .color-choice-btn {
+  background-color: initial;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-}
+} */
 
+/* .button-container: Container for buttons */
 .button-container {
     display: flex;
-    flex-direction: row; /* Zorgt ervoor dat de knoppen naast elkaar verschijnen */
-    margin-bottom: 10px; /* Optioneel: ruimte tussen de containers */
-    align-items: center; /* Zorgt ervoor dat de knoppen verticaal gecentreerd zijn */
-    flex-wrap: wrap; /* Zorgt ervoor dat de secties onder de knoppen verschijnen */
+    flex-direction: row; 
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap; 
 }
 
-
+/* .btn-custom: Custom button styling
 .btn-custom {
-  display: block;
   width: 100%;
-  text-align: left;
-  padding: 10px 15px;
+  text-align: center;
+  padding: 10px 10px;
   margin: 5px;
   margin-bottom: 10px;
   border: none;
@@ -42,27 +45,46 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+} */
 
-.close-btn {
-  height: 40px; /* Stel een vaste hoogte in voor de knoppen */
-  width: 15%; /* Specifieke breedte voor de close button */
+.btn-common {
+  width: 100%;
+  padding: 10px;
+  margin: 5px;
+  height: 40px;
   color: #333;
+  border: none;
+  border-radius: 5px;
   display: flex;
-  justify-content: center; /* Horizontaal centreren */
-  align-items: center; /* Verticaal centreren */
+  align-items: center;
+  white-space: nowrap;
+
 }
 
-.color-btn {
-  height: 40px; /* Stel een vaste hoogte in voor de knoppen */
-  width: 15%;
-  color: #333; 
-}
-
+/* .group-btn: Button for grouping */
 .group-btn {
-  height: 40px; /* Stel een vaste hoogte in voor de knoppen */
   width: 60%;
   color: #333; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  justify-content: left;
 }
+
+/* .group-btn i: Icon for group button */
+.group-btn i {
+  margin-left: 10px;
+  margin-right: 15px;
+}
+
+/* .close-btn: Button for closing */
+.close-btn {
+  width: 15%;
+  justify-content: center;
+}
+
+/* .color-btn: Button for color selection */
+.color-btn {
+  width: 15%;
+  justify-content: center;
+}
+
