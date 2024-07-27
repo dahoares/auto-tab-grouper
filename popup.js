@@ -104,11 +104,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       Object.entries(colors).forEach(([key, value]) => {
         const colorButton = document.createElement('button');
-        colorButton.className = 'btn-custom color-choice-btn';
+        colorButton.className = 'color-choice-btn';
         colorButton.style.backgroundColor = value;
-        colorButton.style.width = '30px';
-        colorButton.style.height = '30px';
-        colorButton.style.borderRadius = '50%';
         colorButton.onclick = async () => {
           try {
             await chrome.tabGroups.update(groupId, { color: key });

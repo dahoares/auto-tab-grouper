@@ -16,12 +16,12 @@
 }
 
 /* .color-choice-btn: Button for choosing colors */
-/* .color-choice-btn {
-  background-color: initial;
-  width: 10px;
-  height: 10px;
+.color-choice-btn {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-} */
+  border: none;
+} 
 
 /* .button-container: Container for buttons */
 .button-container {
@@ -31,21 +31,6 @@
     align-items: center;
     flex-wrap: wrap; 
 }
-
-/* .btn-custom: Custom button styling
-.btn-custom {
-  width: 100%;
-  text-align: center;
-  padding: 10px 10px;
-  margin: 5px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-} */
 
 .btn-common {
   width: 100%;
