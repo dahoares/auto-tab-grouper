@@ -78,11 +78,17 @@ document.addEventListener('DOMContentLoaded', async () => {
           try {
             await chrome.tabGroups.update(groupId, { color: key });
             console.log(`Group color updated to ${key}`);
+
+            const groupButton = document.querySelector(`[data-group-id="${groupId}"] .group-btn`);
+            if (groupButton) {
+              groupButton.style.backgroundColor = value;
+            } else {
+              console.error('Group button not found');
+            }
           } catch (error) {
             console.error('Error updating group color:', error);
           }
         };
-      
         colorSection.appendChild(colorButton);
       });
       
