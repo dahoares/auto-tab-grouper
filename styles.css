@@ -7,6 +7,11 @@ body {
   overflow: scroll;
 }
 
+h1 {
+  font-weight: bold;
+  font-size: 35px;
+}
+
 .container {
   width: 400px;
   max-width: 400px;
@@ -93,6 +98,7 @@ body {
   color: #333; 
   overflow: scroll;
   text-overflow: ellipsis;
+  display: flex;
   justify-content: left;
 }
 
@@ -105,12 +111,14 @@ body {
 /* .close-btn: Button for closing */
 .close-btn {
   width: 15%;
+  display: flex;
   justify-content: center;
 }
 
 /* .color-btn: Button for color selection */
 .color-btn {
   width: 15%;
+  display: flex;
   justify-content: center;
 }
 
@@ -120,8 +128,8 @@ body {
   align-items: center;
   width: 100%;
   text-align: left;
-  padding: 10px 15px;
-  margin-bottom: 10px;
+  padding: 20px 20px;
+  margin: 10px auto;
   border: none;
   border-radius: 5px;
   background-color: #f0f0f0;
