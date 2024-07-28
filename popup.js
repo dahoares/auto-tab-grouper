@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function displayTabsForGroup(groupId) {
     const existingTabsSection = document.getElementById('tabs-section-' + groupId);
-    const existingColorSection = document.getElementById('color-section-' + groupId);
     if (existingTabsSection) {
         existingTabsSection.remove();
         return;
@@ -39,6 +38,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             tabButton.onclick = () => {
                 chrome.tabs.update(tab.id, { active: true });
             };
+
+            const closeButton = document.createElement('button');
+            closeButton.textContent = '✖';
+            closeButton.className = 'tab-close-btn';
+            closeButton.onclick = async (event) => {
+                event.stopPropagation();
+                await chrome.tabs.remove(tab.id);
+                tabButton.remove();
+            };
+
+            tabButton.appendChild(closeButton);
             tabsSection.appendChild(tabButton);
         });
 

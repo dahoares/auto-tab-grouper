@@ -115,7 +115,9 @@ body {
 }
 
 .tab-button {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   text-align: left;
   padding: 10px 15px;
@@ -129,4 +131,12 @@ body {
 
 .tab-button:hover {
   background-color: #e0e0e0;
+}
+
+.tab-close-btn {
+  margin-left: 10px;
+  background-color: transparent;
+  border: none;
+  color: #ae3333;
+  cursor: pointer;
 }
