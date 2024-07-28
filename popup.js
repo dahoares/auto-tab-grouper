@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the JavaScript code for the popup window.
+ */
 document.addEventListener('DOMContentLoaded', async () => {
 
   try {
@@ -17,7 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const pauseButton = document.getElementById('pause');
   const groupWindowsButton = document.getElementById('group-windows');
-  
+
+  // Retrieve the values of 'pause' and 'groupWindows' from the Chrome storage
   chrome.storage.sync.get(['pause', 'groupWindows'], (data) => {
     updateButtonState(pauseButton, data.pause);
     updateButtonState(groupWindowsButton, data.groupWindows);
@@ -35,6 +39,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateButtonState(groupWindowsButton, isActive);
   });
 
+  /**
+   * Displays the tabs for a given group ID.
+   *
+   * @param {number} groupId - The ID of the group.
+   * @returns {Promise<void>} - A promise that resolves when the tabs are displayed.
+   * @throws {Error} - If there is an error displaying the tabs.
+   */
   async function displayTabsForGroup(groupId) {
     const existingTabsSection = document.getElementById('tabs-section-' + groupId);
     if (existingTabsSection) {
@@ -75,6 +86,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 }
   
+  /**
+   * Changes the color of a tab group.
+   * If the color section for the group already exists, it is removed.
+   * If the color section does not exist, it is created and appended to the group button container.
+   * Clicking on a color button updates the group color and the background color of the group button.
+   *
+   * @param {number} groupId - The ID of the tab group.
+   */
   function changeGroupColor(groupId) {  
       const existingColorSection = document.getElementById('color-section-' + groupId);
       if (existingColorSection) {
@@ -85,19 +104,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const colorSection = document.createElement('div');
       colorSection.id = 'color-section-' + groupId;
       colorSection.className = 'color-section';
-
-      const colors = {
-        grey: '#DADCE0',
-        blue: '#8AB4F8',
-        red: '#F28B82',
-        yellow: '#FDD663',
-        green: '#81C995',
-        pink: '#FF8BCB',
-        purple: '#C58AF9',
-        cyan: '#78D9EC',
-        orange: '#FCAD70'
-      };
-           
       
       Object.entries(colors).forEach(([key, value]) => {
         const colorButton = document.createElement('button');
@@ -129,37 +135,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
   }
 
+  // Display existing tab groups
   try {
     const groups = await chrome.tabGroups.query({});
     groups.forEach((group) => {
+      // Create a button for the group
       const groupButton = document.createElement('button');
       groupButton.innerHTML = `<i class="fas fa-link"></i> ${group.title}`;
       groupButton.className = 'btn-button-container-buttons group-btn';
       groupButton.style.backgroundColor = getSelectedColor(group.color);
       groupButton.onclick = () => {
+        // Display the tabs for the group
         displayTabsForGroup(group.id);
         const existingColorSection = document.getElementById('color-section-' + group.id);
         if (existingColorSection) {
           existingColorSection.remove();
         }
       };
-  
+
+      // Create a button for changing the group color
       const colorButton = document.createElement('button');
       colorButton.innerHTML = `<i class="fas fa-palette"></i>`;
       colorButton.className = 'btn-button-container-buttons color-btn';
       colorButton.onclick = () => {
+        // Change the color of the group
         changeGroupColor(group.id);
         const existingTabsSection = document.getElementById('tabs-section-' + group.id);
         if (existingTabsSection) {
           existingTabsSection.remove();
         }
       };
-  
+
+      // Create a button for closing the group
       const closeButton = document.createElement('button');
       closeButton.innerHTML = `<i class="fas fa-times"></i>`;
       closeButton.className = 'btn-button-container-buttons close-btn';
       closeButton.onclick = async () => {
         try {
+          // Remove all tabs in the group
           const tabs = await chrome.tabs.query({ groupId: group.id });
           const tabIds = tabs.map(tab => tab.id);
           await chrome.tabs.remove(tabIds);
@@ -169,6 +182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       };
 
+      // Create a container for the buttons and tabs display section
       const buttonContainer = document.createElement('div');
       buttonContainer.setAttribute('data-group-id', group.id);
       buttonContainer.className = 'button-container';
@@ -176,49 +190,64 @@ document.addEventListener('DOMContentLoaded', async () => {
       buttonContainer.appendChild(colorButton);
       buttonContainer.appendChild(closeButton);
 
+      // Create a section for displaying the tabs
       const tabsDisplaySection = document.createElement('div');
       tabsDisplaySection.className = 'tabs-display-section';
       buttonContainer.appendChild(tabsDisplaySection);
 
+      // Create a section for changing the group color
       const colorSection = document.createElement('div');
       colorSection.className = 'color-section';
       buttonContainer.appendChild(colorSection);
 
-      
+      // Append the button container to the groups section
       document.getElementById('groups-section').appendChild(buttonContainer);
 
+      // Add a horizontal line separator
       const hrLine = document.createElement('hr');
       hrLine.style.width = '70%';
-      document.getElementById('groups-section').appendChild(hrLine);    
+      document.getElementById('groups-section').appendChild(hrLine);
     });
   } catch (error) {
     console.error('Error fetching tab groups:', error);
   }
-
-  function updateButtonState(button, isActive) {
-    if (isActive) {
-      button.classList.add('active');
-      button.classList.remove('disabled');
-    } else {
-      button.classList.remove('active');
-      button.classList.add('disabled');
-    }
-  }
-
 });
 
-function getSelectedColor(color) {
-  const colors = {
-    grey: '#DADCE0',
-    blue: '#8AB4F8',
-    red: '#F28B82',
-    yellow: '#FDD663',
-    green: '#81C995',
-    pink: '#FF8BCB',
-    purple: '#C58AF9',
-    cyan: '#78D9EC',
-    orange: '#FCAD70'
-  };
+const colors = {
+  grey: '#DADCE0',
+  blue: '#8AB4F8',
+  red: '#F28B82',
+  yellow: '#FDD663',
+  green: '#81C995',
+  pink: '#FF8BCB',
+  purple: '#C58AF9',
+  cyan: '#78D9EC',
+  orange: '#FCAD70'
+}; 
 
+/**
+* Updates the state of a button based on the isActive parameter.
+* @param {HTMLElement} button - The button element to update.
+* @param {boolean} isActive - Indicates whether the button should be active or disabled.
+* @returns {void}
+*/
+function updateButtonState(button, isActive) {
+  if (isActive) {
+    button.classList.add('active');
+    button.classList.remove('disabled');
+  } else {
+    button.classList.remove('active');
+    button.classList.add('disabled');
+ }
+}
+  
+/**
+ * Retrieves the corresponding color code based on the given color name.
+ * @param {string} color - The name of the color.
+ * @returns {string} The color code associated with the given color name, or the default color code if no match is found.
+ */
+
+
+function getSelectedColor(color) {
   return colors[color] || '#DADCE0'; 
 }
