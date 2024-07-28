@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function displayTabsForGroup(groupId) {
     const existingTabsSection = document.getElementById('tabs-section-' + groupId);
+    const existingColorSection = document.getElementById('color-section-' + groupId);
     if (existingTabsSection) {
         existingTabsSection.remove();
         return;
@@ -107,13 +108,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       groupButton.innerHTML = `<i class="fas fa-link"></i> ${group.title}`;
       groupButton.className = 'btn-button-container-buttons group-btn';
       groupButton.style.backgroundColor = getSelectedColor(group.color);
-      groupButton.onclick = () => displayTabsForGroup(group.id);
+      groupButton.onclick = () => {
+        displayTabsForGroup(group.id);
+        const existingColorSection = document.getElementById('color-section-' + group.id);
+        if (existingColorSection) {
+          existingColorSection.remove();
+        }
+      };
   
       const colorButton = document.createElement('button');
       colorButton.innerHTML = `<i class="fas fa-palette"></i>`;
       colorButton.className = 'btn-button-container-buttons color-btn';
       colorButton.onclick = () => {
         changeGroupColor(group.id);
+        const existingTabsSection = document.getElementById('tabs-section-' + group.id);
+        if (existingTabsSection) {
+          existingTabsSection.remove();
+        }
       };
   
       const closeButton = document.createElement('button');
