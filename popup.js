@@ -1,4 +1,20 @@
 document.addEventListener('DOMContentLoaded', async () => {
+
+  try {
+    const groups = await chrome.tabGroups.query({});
+    const noActiveGroups = document.getElementById('no-active-groups');
+
+    if (groups.length === 0) {
+      noActiveGroups.style.display = 'block';
+    } else {
+      noActiveGroups.style.display = 'none';
+      groups.forEach((group) => {
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching tab groups:', error);
+  }
+
   const pauseButton = document.getElementById('pause');
   const groupWindowsButton = document.getElementById('group-windows');
   
