@@ -1,3 +1,44 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  overflow: scroll;
+}
+
+.container {
+  width: 400px;
+  max-width: 400px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+
+}
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.btn-custom {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+}
+.btn-custom.active {
+  background-color: #007bff;
+}
+.btn-custom.disabled {
+  background-color: #6c757d;
+}
+.btn-custom i {
+  margin-right: 10px;
+}
+
 /* .color-section: Section for color choices */
 .color-section {
   display: flex;
@@ -7,12 +48,12 @@
   padding-right: 10px;
   box-sizing: border-box;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 /* .tabs-display-section: Section for displaying tabs */
 .tabs-display-section {
-  width: 100%; 
-  margin-top: 10px; 
+  width: 100%;
 }
 
 /* .color-choice-btn: Button for choosing colors */
@@ -27,30 +68,30 @@
 .button-container {
     display: flex;
     flex-direction: row; 
-    margin-bottom: 10px;
     align-items: center;
     flex-wrap: wrap; 
+    margin-bottom: 10px;
+    /* border-bottom: 1px solid #333; */
 }
 
-.btn-common {
+.btn-button-container-buttons {
   width: 100%;
   padding: 10px;
   margin: 5px;
-  height: 40px;
+  height: 45px;
   color: #333;
   border: none;
   border-radius: 5px;
   display: flex;
   align-items: center;
   white-space: nowrap;
-
 }
 
 /* .group-btn: Button for grouping */
 .group-btn {
   width: 60%;
   color: #333; 
-  overflow: hidden;
+  overflow: scroll;
   text-overflow: ellipsis;
   justify-content: left;
 }

@@ -85,10 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const colorSection = document.createElement('div');
       colorSection.id = 'color-section-' + groupId;
       colorSection.className = 'color-section';
-      colorSection.style.display = 'flex';
-      colorSection.style.justifyContent = 'space-around';
-      colorSection.style.marginTop = '10px';
-      
+
       const colors = {
         grey: '#DADCE0',
         blue: '#8AB4F8',
@@ -131,20 +128,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     groups.forEach((group) => {
       const groupButton = document.createElement('button');
       groupButton.innerHTML = `<i class="fas fa-link"></i> ${group.title}`;
-      groupButton.className = 'btn-common group-btn';
+      groupButton.className = 'btn-button-container-buttons group-btn';
       groupButton.style.backgroundColor = getSelectedColor(group.color);
       groupButton.onclick = () => displayTabsForGroup(group.id);
   
       const colorButton = document.createElement('button');
       colorButton.innerHTML = `<i class="fas fa-palette"></i>`;
-      colorButton.className = 'btn-common color-btn';
+      colorButton.className = 'btn-button-container-buttons color-btn';
       colorButton.onclick = () => {
         changeGroupColor(group.id);
       };
   
       const closeButton = document.createElement('button');
       closeButton.innerHTML = `<i class="fas fa-times"></i>`;
-      closeButton.className = 'btn-common close-btn';
+      closeButton.className = 'btn-button-container-buttons close-btn';
       closeButton.onclick = async () => {
         try {
           const tabs = await chrome.tabs.query({ groupId: group.id });
@@ -172,6 +169,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       buttonContainer.appendChild(colorSection);
 
       document.getElementById('groups-section').appendChild(buttonContainer);
+
+      const hrLine = document.createElement('hr');
+      hrLine.style.width = '70%';
+      document.getElementById('groups-section').appendChild(hrLine);    
     });
   } catch (error) {
     console.error('Error fetching tab groups:', error);
