@@ -2,18 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pauseButton = document.getElementById('pause');
   const groupWindowsButton = document.getElementById('group-windows');
   
-  const colors = {
-    grey: '#DADCE0',
-    blue: '#8AB4F8',
-    red: '#F28B82',
-    yellow: '#FDD663',
-    green: '#81C995',
-    pink: '#FF8BCB',
-    purple: '#C58AF9',
-    cyan: '#78D9EC',
-    orange: '#FCAD70'
-  };
-
   chrome.storage.sync.get(['pause', 'groupWindows'], (data) => {
     updateButtonState(pauseButton, data.pause);
     updateButtonState(groupWindowsButton, data.groupWindows);
@@ -35,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const existingTabsSection = document.getElementById('tabs-section-' + groupId);
     if (existingTabsSection) {
         existingTabsSection.remove();
+        return;
     }
 
     try {
@@ -57,31 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 }
   
-  function changeGroupColor(groupId) {
-      const tabsDisplaySection = document.getElementById('tabs-display-section');
-      if (tabsDisplaySection) {
-          tabsDisplaySection.innerHTML = '';
-      }
-  
+  function changeGroupColor(groupId) {  
       const existingColorSection = document.getElementById('color-section-' + groupId);
       if (existingColorSection) {
         existingColorSection.remove();
+        return; 
       }
       
-      function changeGroupColor(groupId) {
-
-  const existingColorSection = document.getElementById('color-section-' + groupId);
-  if (existingColorSection) {
-    existingColorSection.remove();
-  }
-
-  const buttonContainer = document.querySelector(`[data-group-id="${groupId}"]`);
-  if (buttonContainer) {
-    buttonContainer.appendChild(colorSection);
-  } else {
-    console.error('Button container not found');
-  }
-}
       const colorSection = document.createElement('div');
       colorSection.id = 'color-section-' + groupId;
       colorSection.className = 'color-section';
@@ -190,14 +161,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
-groupButton.onclick = () => {
-  toggleSectionVisibility(group.id, 'group');
-};
-
-colorButton.onclick = () => {
-  toggleSectionVisibility(group.id, 'color');
-};
-
 function getSelectedColor(color) {
   const colors = {
     grey: '#DADCE0',
@@ -212,31 +175,4 @@ function getSelectedColor(color) {
   };
 
   return colors[color] || '#DADCE0'; 
-}
-
-function toggleSectionVisibility(groupId, sectionType) {
-  const buttonContainer = document.querySelector(`[data-group-id="${groupId}"]`);
-  if (!buttonContainer) {
-    console.error('Button container not found');
-    return;
-  }
-
-  const tabsSection = buttonContainer.querySelector('.tabs-display-section');
-  const colorSection = buttonContainer.querySelector('.color-section');
-
-  if (sectionType === 'tabs') {
-    if (tabsSection.style.display === 'block') {
-      tabsSection.style.display = 'none';
-    } else {
-      tabsSection.style.display = 'block';
-      colorSection.style.display = 'none';
-    }
-  } else if (sectionType === 'color') {
-    if (colorSection.style.display === 'block') {
-      colorSection.style.display = 'none';
-    } else {
-      colorSection.style.display = 'block';
-      tabsSection.style.display = 'none';
-    }
-  }
 }
