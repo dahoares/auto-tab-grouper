@@ -29,16 +29,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         const tabs = await chrome.tabs.query({ groupId: groupId });
-        const tabsList = document.createElement('ul');
-        tabs.forEach((tab) => {
-            const listItem = document.createElement('li');
-            listItem.textContent = tab.title;
-            tabsList.appendChild(listItem);
-        });
-
         const tabsSection = document.createElement('div');
         tabsSection.id = 'tabs-section-' + groupId;
-        tabsSection.appendChild(tabsList);
+
+        tabs.forEach((tab) => {
+            const tabButton = document.createElement('button');
+            tabButton.textContent = tab.title;
+            tabButton.className = 'tab-button';
+            tabButton.onclick = () => {
+                chrome.tabs.update(tab.id, { active: true });
+            };
+            tabsSection.appendChild(tabButton);
+        });
 
         const buttonContainer = document.querySelector(`[data-group-id="${groupId}"]`);
         buttonContainer.appendChild(tabsSection);
@@ -156,6 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       colorSection.className = 'color-section';
       buttonContainer.appendChild(colorSection);
 
+      
       document.getElementById('groups-section').appendChild(buttonContainer);
 
       const hrLine = document.createElement('hr');
