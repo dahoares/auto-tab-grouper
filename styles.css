@@ -53,7 +53,6 @@ h1 {
   padding-right: 10px;
   box-sizing: border-box;
   width: 100%;
-  margin-bottom: 10px;
 }
 
 /* .tabs-display-section: Section for displaying tabs */
@@ -75,8 +74,7 @@ h1 {
     flex-direction: row; 
     align-items: center;
     flex-wrap: wrap; 
-    margin-bottom: 10px;
-    /* border-bottom: 1px solid #333; */
+    margin-bottom: 5px;
 }
 
 .btn-button-container-buttons {
@@ -147,4 +145,19 @@ h1 {
   border: none;
   color: #ae3333;
   cursor: pointer;
+}
+
+.tab-note-container {
+  margin-top: 10px;
+}
+
+.tab-note-input {
+  width: 90%;
+  height: 25px;
+  padding: 10px;
+  margin-left: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  overflow: scroll;
 }

@@ -75,8 +75,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                 tabButton.remove();
             };
 
+            const noteContainer = document.createElement('div');
+            noteContainer.className = 'tab-note-container';
+            const noteInput = document.createElement('input');
+            noteInput.type = 'text';
+            noteInput.className = 'tab-note-input';
+            noteInput.placeholder = 'Add a note...';
+            
+            const tabUrl = tab.url; // Gebruik de URL van de tab
+            getTabNoteByUrl(tabUrl, (note) => {
+                noteInput.value = note;
+            });
+            noteInput.addEventListener('input', (event) => {
+                saveTabNoteByUrl(tabUrl, event.target.value);
+            });
+            
+            noteContainer.appendChild(noteInput);
             tabButton.appendChild(closeButton);
             tabsSection.appendChild(tabButton);
+            tabsSection.appendChild(noteContainer);
         });
 
         const buttonContainer = document.querySelector(`[data-group-id="${groupId}"]`);
@@ -250,4 +267,14 @@ function updateButtonState(button, isActive) {
 
 function getSelectedColor(color) {
   return colors[color] || '#DADCE0'; 
+}
+
+function saveTabNoteByUrl(tabUrl, note) {
+  chrome.storage.sync.set({ [`tabNote_${tabUrl}`]: note });
+}
+
+function getTabNoteByUrl(tabUrl, callback) {
+  chrome.storage.sync.get([`tabNote_${tabUrl}`], (result) => {
+    callback(result[`tabNote_${tabUrl}`] || '');
+  });
 }
