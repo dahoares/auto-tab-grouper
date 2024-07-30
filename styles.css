@@ -165,3 +165,8 @@ h1 {
   box-sizing: border-box;
   overflow: scroll;
 }
+
+.donation-section {
+  text-align: center;
+  margin-top: 20px;
+}

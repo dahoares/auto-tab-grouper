@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             noteInput.className = 'tab-note-input';
             noteInput.placeholder = 'Add a note...';
             
-            const tabUrl = tab.url; // Gebruik de URL van de tab
+            const tabUrl = tab.url;
             getTabNoteByUrl(tabUrl, (note) => {
                 noteInput.value = note;
             });
