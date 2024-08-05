@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 event.stopPropagation();
                 await chrome.tabs.remove(tab.id);
                 tabButton.remove();
-                // noteContainer.remove();
+                noteContainer.remove();
             };
 
             const noteContainer = document.createElement('div');
