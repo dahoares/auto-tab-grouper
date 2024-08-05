@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const tabs = await chrome.tabs.query({ groupId: groupId });
         const tabsSection = document.createElement('div');
+        tabsSection.className = 'tabssection ';
         tabsSection.id = 'tabs-section-' + groupId;
 
         tabs.forEach((tab) => {
