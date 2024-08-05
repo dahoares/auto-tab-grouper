@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const pauseButton = document.getElementById('pause');
   const groupWindowsButton = document.getElementById('group-windows');
+  const mergeWindowsButton = document.getElementById('merge-windows');
 
   // Retrieve the values of 'pause' and 'groupWindows' from the Chrome storage
   chrome.storage.sync.get(['pause', 'groupWindows'], (data) => {
@@ -38,6 +39,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.storage.sync.set({ groupWindows: isActive });
     updateButtonState(groupWindowsButton, isActive);
   });
+
+  mergeWindowsButton.addEventListener('click', mergeWindows);
 
   /**
    * Displays the tabs for a given group ID.
@@ -231,6 +234,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Error fetching tab groups:', error);
   }
 });
+
+async function mergeWindows() {
+  try {
+    const currentWindow = await chrome.windows.getCurrent();
+    const allWindows = await chrome.windows.getAll({ populate: true });
+
+    for (const window of allWindows) {
+      if (window.id !== currentWindow.id) {
+        const groupsInWindow = await chrome.tabGroups.query({ windowId: window.id });
+
+        for (const group of groupsInWindow) {
+          const tabsInGroup = await chrome.tabs.query({ groupId: group.id });
+          const tabIds = tabsInGroup.map(tab => tab.id);
+
+          await chrome.tabs.move(tabIds, { windowId: currentWindow.id, index: -1 });
+          const newGroupId = await chrome.tabs.group({ tabIds: tabIds, createProperties: { windowId: currentWindow.id } });
+
+          await chrome.tabGroups.update(newGroupId, { title: group.title });
+        }
+
+        const ungroupedTabs = window.tabs.filter(tab => tab.groupId === chrome.tabGroups.TAB_GROUP_ID_NONE);
+        for (const tab of ungroupedTabs) {
+          await chrome.tabs.move(tab.id, { windowId: currentWindow.id, index: -1 });
+        }
+
+        await chrome.windows.remove(window.id);
+      }
+    }
+
+    const tabsInCurrentWindow = await chrome.tabs.query({ windowId: currentWindow.id });
+    const tabIds = tabsInCurrentWindow.map(tab => tab.id);
+    await chrome.tabs.group({ tabIds: tabIds });
+
+    console.log('Windows merged successfully, preserving tab groups.');
+  } catch (error) {
+    console.error('Error merging windows:', error);
+  }
+}
 
 const colors = {
   grey: '#DADCE0',
