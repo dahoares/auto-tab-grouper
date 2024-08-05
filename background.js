@@ -3,23 +3,55 @@ async function groupTabs(tabsToUpdate, groupName) {
   const maxAttempts = 3; 
   let attempt = 0;
 
+  const data = await chrome.storage.sync.get(['groupWindows']);
+  const groupAcrossWindows = data.groupWindows;
+
   while (attempt < maxAttempts) {
     try {
       const tabs = await chrome.tabs.query({});
       const groups = await chrome.tabGroups.query({});
-      let existingGroup = groups.find(g => g.title === groupName);
+      
+      if (groupAcrossWindows) {
+        const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
+        if (tabIds.length === 0) continue;
 
-      const tabIds = tabsToUpdate.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
-      if (tabIds.length === 0) return;
+        let existingGroup = groups.find(g => g.title === groupName);
 
-      if (existingGroup) {
-        if (existingGroup.collapsed) {
-          await chrome.tabGroups.update(existingGroup.id, { collapsed: false });
+        if (existingGroup) {
+          if (existingGroup.collapsed) {
+            await chrome.tabGroups.update(existingGroup.id, { collapsed: false });
+          }
+          await groupTabsInGroup(existingGroup.id, tabIds);
+        } else {
+          const groupId = await chrome.tabs.group({ tabIds: tabIds });
+          await chrome.tabGroups.update(groupId, { title: groupName });
         }
-        await groupTabsInGroup(existingGroup.id, tabIds);
       } else {
-        const groupId = await chrome.tabs.group({ tabIds: tabIds });
-        await chrome.tabGroups.update(groupId, { title: groupName });
+        const tabsByWindow = tabsToUpdate.reduce((acc, tab) => {
+          if (!acc[tab.windowId]) {
+            acc[tab.windowId] = [];
+          }
+          acc[tab.windowId].push(tab);
+          return acc;
+        }, {});
+
+        for (const windowId in tabsByWindow) {
+          const windowTabs = tabsByWindow[windowId];
+          const tabIds = windowTabs.map(t => t.id).filter(id => tabs.some(tab => tab.id === id));
+          if (tabIds.length === 0) continue;
+
+          let existingGroup = groups.find(g => g.title === groupName && g.windowId === parseInt(windowId));
+
+          if (existingGroup) {
+            if (existingGroup.collapsed) {
+              await chrome.tabGroups.update(existingGroup.id, { collapsed: false });
+            }
+            await groupTabsInGroup(existingGroup.id, tabIds);
+          } else {
+            const groupId = await chrome.tabs.group({ tabIds: tabIds });
+            await chrome.tabGroups.update(groupId, { title: groupName });
+          }
+        }
       }
       break;
     } catch (error) {
