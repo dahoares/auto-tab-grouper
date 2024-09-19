@@ -163,15 +163,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       groupButton.innerHTML = `<i class="fas fa-link"></i> ${group.title}`;
       groupButton.className = 'btn-button-container-buttons group-btn';
       groupButton.style.backgroundColor = getSelectedColor(group.color);
-      groupButton.onclick = async () => {
+      groupButton.onclick = () => {
         // Display the tabs for the group
         displayTabsForGroup(group.id);
-        const tabs = await chrome.tabs.query({ groupId: group.id });
-        if (tabs.length > 0) {
-          const windowId = tabs[0].windowId;
-          chrome.windows.update(windowId, { focused: true });
-        }
-      
         const existingColorSection = document.getElementById('color-section-' + group.id);
         if (existingColorSection) {
           existingColorSection.remove();
